@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -39,6 +39,14 @@ const EditTask = ({ id, name }: Prop) => {
       },
     });
   };
+
+  useEffect(() => {
+    if (open) {
+      requestAnimationFrame(() => {
+        nameRef.current?.focus();
+      });
+    }
+  }, [open]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

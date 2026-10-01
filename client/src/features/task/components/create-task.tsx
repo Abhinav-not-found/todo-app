@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import useTask from "../task.hook";
+import { Plus } from "lucide-react";
 
 const CreateTask = () => {
   const [open, setOpen] = useState(false);
@@ -35,10 +36,29 @@ const CreateTask = () => {
     });
   };
 
+  useEffect(() => {
+    if (open) {
+      requestAnimationFrame(() => {
+        nameRef.current?.focus();
+      });
+    }
+  }, [open]);
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <Button>Create task</Button>
+        {/* Desktop button */}
+        <Button className={'hidden md:block'}>Create task</Button>
+
+        {/* Mobile button */}
+        <div className="bg-white w-full h-fit absolute md:hidden bottom-2 right-0 flex items-center justify-end px-2 py-1">
+          <Button
+            size={'icon'}
+            className={'rounded-full size-16 '}
+          >
+            <Plus className='size-7' />
+          </Button>
+        </div>
       </DialogTrigger>
       <DialogContent>
         <form onSubmit={handleSubmit}>
@@ -52,7 +72,7 @@ const CreateTask = () => {
                   placeholder="eg. do homework"
                 />
               </Field>
-              <Button type="submit" disabled={createMutation.isPending}>
+              <Button type="submit" disabled={createMutation.isPending} className={'py-5 md:py-4'}>
                 {createMutation.isPending ? "Creating..." : "Create task"}
               </Button>
             </FieldGroup>
